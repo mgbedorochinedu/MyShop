@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Runtime.Caching;
-using MyShop.Core.Models;
+using System.Runtime.Caching; 
+using MyShop.Core.Models; 
 
 namespace MyShop.DataAccess.InMemeory
 {
@@ -19,9 +19,9 @@ namespace MyShop.DataAccess.InMemeory
         public ProductRepository()
         {
             products = cache["products"] as List<Product>;
-            if(products == null)
+            if(products == null) 
             {
-                products = new List<Product>();
+                products = new List<Product>(); 
             }
         }
         //Create a Commit method 
@@ -33,7 +33,12 @@ namespace MyShop.DataAccess.InMemeory
         //Below will create individual endpoints to Insert, Find, Delete, Edit and perhaps return the entire collections
 
         //For Insert Method
-        public void Insert(Product product)
+        public void Insert(Product p)
+        {
+            products.Add(p);
+        }
+        //For Update Method
+        public void Update(Product product)
         {
             Product productToUpdate = products.Find(p => p.Id == product.Id);
 
