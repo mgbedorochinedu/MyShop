@@ -3,20 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc; 
-using MyShop.Core.Models; 
+using MyShop.Core.Models;
+using MyShop.Core.viewModel; 
 using MyShop.DataAccess.InMemeory; 
 
 namespace MyShop.WebUI.Controllers
 {
     public class ProductManagerController : Controller
     {
-        //Create an instance of the Product repository
         ProductRepository context;
+        ProductCategoryRepository productCategories; 
 
-        //Create a Constructor to initialize the product repository
         public ProductManagerController()
         {
             context = new ProductRepository();
+
+            //We Initialize ProductCategoryRepository
+            productCategories = new ProductCategoryRepository(); 
         }
 
         // GET: ProductManager
@@ -24,17 +27,21 @@ namespace MyShop.WebUI.Controllers
         {
             //We want Index page to return the list of products which is on the collection
             List<Product> products = context.Collection().ToList();
+
             return View(products);
         }
 
-        //GET: Add method to create products. NB: This method will only display the page
+        //GET: Add Create method
         public ActionResult Create()
         {
-            Product product = new Product();
-            return View(product);
+            ProductManagerViewModel viewModel = new ProductManagerViewModel();
+ 
+            viewModel.Product = new Product();
+            viewModel.ProductCategories = productCategories.Collection(); 
+       
+            return View(viewModel);  
         }
-
-        //POST: Add method to create products. NB: This method will be to let details posted in
+        
         [HttpPost]
         public ActionResult Create(Product product)
         {
@@ -60,10 +67,15 @@ namespace MyShop.WebUI.Controllers
             }
             else
             {
-                return View(product);
+                ProductManagerViewModel viewModel = new ProductManagerViewModel(); 
+
+                viewModel.Product = product; 
+                viewModel.ProductCategories = productCategories.Collection();  
+
+                return View(viewModel);  
             }
         }
-
+       
         //POST: Add Edit method
         [HttpPost]
         public ActionResult Edit(Product product, string Id)
@@ -92,7 +104,7 @@ namespace MyShop.WebUI.Controllers
 
             }
         }
-//......................................................................................................................................................................................
+
         //GET: Add Delete method
         public ActionResult Delete(string Id)
         {
@@ -108,7 +120,7 @@ namespace MyShop.WebUI.Controllers
         }
         //POST: Add Delete method
         [HttpPost]
-        [ActionName("Delete")] //Gave it alternative action name - delete
+        [ActionName("Delete")] 
         public ActionResult ConfirmDelete(Product product, string Id)
         {
             Product productToDelete = context.Find(Id);
@@ -119,7 +131,7 @@ namespace MyShop.WebUI.Controllers
             else
             {
                 context.Delete(Id);
-                context.Commit(); //Delete method should commit those changes after deletion
+                context.Commit(); 
                 return RedirectToAction("Index");
             }
         }
