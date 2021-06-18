@@ -8,11 +8,8 @@ using System.Threading.Tasks;
 
 namespace MyShop.Core.Models
 {
-    public class Product
+    public class Product : BaseEntity //Implemented the BaseEntity
     {
-        //Creating basic products information
-        public string Id { get; set; }
-
         [StringLength(20)]
         [DisplayName("Product Name")]
         public string Name { get; set; }
@@ -22,10 +19,5 @@ namespace MyShop.Core.Models
         public decimal Price { get; set; }
         public string Categories { get; set; }
         public string Image { get; set; }
-        //Create a Constructor so that everytime we create an instance pf Product, it automatically generate an ID instead from the DB
-        public Product()
-        {
-            this.Id = Guid.NewGuid().ToString();
-        }
     }
 }

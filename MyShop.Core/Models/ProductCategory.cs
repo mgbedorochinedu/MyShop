@@ -6,14 +6,11 @@ using System.Threading.Tasks;
 
 namespace MyShop.Core.Models
 {
-    public class ProductCategory
+    public class ProductCategory : BaseEntity //Implemented the BaseEntity 
     {
-        public string Id { get; set; }
         public string Category { get; set; }
-        //Constructor to initialize the ID
-        public ProductCategory()
-        {
-            this.Id = Guid.NewGuid().ToString();
-        }
     }
 }
+
+
+
