@@ -5,25 +5,26 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Caching;
 using MyShop.Core.Models;
+using MyShop.Core.Contracts; 
 
 namespace MyShop.DataAccess.InMemeory
 {
-    public class InMemoryRepository<T> where T : BaseEntity 
+    public class InMemoryRepository<T> : IRepository<T> where T : BaseEntity 
     {
-        ObjectCache cache = MemoryCache.Default;  
-        List<T> items; 
-        string className; 
+        ObjectCache cache = MemoryCache.Default;
+        List<T> items;
+        string className;
 
-        public InMemoryRepository()  
+        public InMemoryRepository()
         {
-            className = typeof(T).Name; 
-            items = cache[className] as List<T>; 
-            if(items == null)
+            className = typeof(T).Name;
+            items = cache[className] as List<T>;
+            if (items == null)
             {
                 items = new List<T>();
             }
         }
-               
+
         //Create a Generic for Commit method that stored items in memory
         public void Commit()
         {
@@ -40,7 +41,7 @@ namespace MyShop.DataAccess.InMemeory
         public void Update(T t)
         {
             T tToUpdate = items.Find(i => i.Id == t.Id);
-            if(tToUpdate != null)
+            if (tToUpdate != null)
             {
                 tToUpdate = t;
             }
@@ -53,7 +54,7 @@ namespace MyShop.DataAccess.InMemeory
         public T Find(string Id)
         {
             T t = items.Find(i => i.Id == Id);
-            if(t != null)
+            if (t != null)
             {
                 return t;
             }
