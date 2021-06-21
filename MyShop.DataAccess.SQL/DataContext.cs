@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace MyShop.DataAccess.SQL
 {
     //DataContext class inherits from a data Entity Framework called DbContext
-    class DataContext : DbContext 
+    public class DataContext : DbContext 
     {
         //We create a Constructor so that we can capture and pass in that connection string that the base class is expecting
         public DataContext()
