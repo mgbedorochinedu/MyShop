@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -41,9 +42,9 @@ namespace MyShop.WebUI.Controllers
        
             return View(viewModel);  
         }
-        
-        [HttpPost]
-        public ActionResult Create(Product product)
+        //POST: Add Create method
+        [HttpPost]                                  
+        public ActionResult Create(Product product, HttpPostedFileBase file) 
         {
             if (!ModelState.IsValid)
             {
@@ -51,6 +52,12 @@ namespace MyShop.WebUI.Controllers
             }
             else
             {
+                if(file != null) 
+                {
+                    product.Image = product.Id + Path.GetExtension(file.FileName); 
+
+                     file.SaveAs(Server.MapPath("//Content//ProductImages//") + product.Image);  
+                }
                 context.Insert(product);
                 context.Commit();
                 return RedirectToAction("Index"); 
@@ -75,10 +82,10 @@ namespace MyShop.WebUI.Controllers
                 return View(viewModel);  
             }
         }
-       
+   //..............................................................................................................................    
         //POST: Add Edit method
         [HttpPost]
-        public ActionResult Edit(Product product, string Id)
+        public ActionResult Edit(Product product, string Id, HttpPostedFileBase file) //Telling it is a 'HttpPostedFileBase file'
         {
             Product productToEdit = context.Find(Id);
             if (productToEdit == null)
@@ -91,12 +98,20 @@ namespace MyShop.WebUI.Controllers
                 {
                     return View(product);
                 }
-                //This manually Edit the product
+                if(file != null) //Checking if the file exist
+                {
+                    productToEdit.Image = productToEdit.Id + Path.GetExtension(file.FileName); //Changed it to productToEdit
+
+                    file.SaveAs(Server.MapPath("//Content//ProductImages//") + productToEdit.Image); //Changed it to productToEdit
+                }
+
+
                 productToEdit.Categories = product.Categories;
                 productToEdit.Description = product.Description;
-                productToEdit.Image = product.Image;
+/*                productToEdit.Image = product.Image;*/         //We override this line of code by deleting it. It is not neccessary anymore.
                 productToEdit.Name = product.Name;
                 productToEdit.Price = product.Price;
+ //..............................................................................................................................  
                 //Commit changes 
                 context.Commit();
                 //Redirect to Index Page
