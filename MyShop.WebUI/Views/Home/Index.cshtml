@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MyShop.Core.Models.Product>
+﻿@model MyShop.Core.viewModel.ProductListViewModel
 
 @{
     ViewBag.Title = "Home page";
@@ -6,26 +6,45 @@
 
 <h2>Products</h2>
 
-@foreach (var item in Model)
-{
-    <div class="col-md-4" style="height:450px;padding:10px;margin:10px;border:solid thin whitesmoke">
-        <div class="col-md-12">
-            <img class="img" style="height:250px" src="~/Content/ProductImages/@item.Image" />
-        </div>
-        <div class="col-md-12">
-            <strong> @Html.ActionLink(item.Name, "Details", new { id = item.Id }) </strong>
-        </div>
-        <div class="col-md-12">
-            <p>@item.Description </p>
-        </div>
-        <div class="col-md-12">
-            <h4>@item.Price</h4>
-        </div>
-        <div class="col-md-12">
-            <a href="#" class="btn btn-default"> Add the Basket</a>
-        </div>
-    </div>
-}
+<div class="col-md-2">
+    <h4>Filter by Category</h4> 
+<div class="list-group">
+    @* All option for redirecting the user on Index page & ternary operation statement for styling*@
+    @Html.ActionLink("All", "Index", null, new { @class = Request["Category"] == null? "list-group-item active" : "list-group-item" })
 
-<div class="cold-md-12 clearfix"/>
+    @foreach (var cat in Model.ProductCategories) 
+    {
+        //1st ActionLink is "Index" page, 2nd - filter, 3rd - styling 
+        @Html.ActionLink(cat.Category, "Index", new { Category = cat.Category }, new { @class = Request["Category"] == cat.Category ? "list-group-item active" : "list-group-item" });
+    }
+
+</div>
+
+</div>
+<div class="col-md-10">    
+
+    @foreach (var item in Model.Products) 
+    {
+        <div class="col-md-4" style="height:450px;padding:10px;margin:10px;border:solid thin whitesmoke">
+            <div class="col-md-12">
+                <img class="img" style="height:250px" src="~/Content/ProductImages/@item.Image" />
+            </div>
+            <div class="col-md-12">
+                <strong> @Html.ActionLink(item.Name, "Details", new { id = item.Id }) </strong>
+            </div>
+            <div class="col-md-12">
+                <p>@item.Description </p>
+            </div>
+            <div class="col-md-12">
+                <h4>N @item.Price</h4>
+            </div>
+            <div class="col-md-12">
+                <a href="#" class="btn btn-default"> Add the Basket</a>
+            </div>
+
+        </div>
+
+    }
+</div> 
+<div class="col-md-12 clearfix" />
 
