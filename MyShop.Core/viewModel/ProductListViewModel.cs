@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyShop.Core.viewModel
 {
-    //We passed in our Product list and Product Categories list to the viewModel
+    //We passed in our Product list and Product Categories list to the viewModel to perform filter
     public class ProductListViewModel 
     {
         public IEnumerable<Product> Products { get; set; } 
