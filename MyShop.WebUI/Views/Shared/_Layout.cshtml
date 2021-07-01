@@ -23,9 +23,12 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("Product Admin", "Index", "ProductManager")</li>
-                    <li>@Html.ActionLink("Category Admin", "Index", "ProductCategoryManager")</li> @* Change the nav link to Category Admin *@
+                    <li>@Html.ActionLink("Category Admin", "Index", "ProductCategoryManager")</li> 
                 </ul>
                 @Html.Partial("_LoginPartial")
+                @{ 
+                    Html.RenderAction("BasketSummary", "Basket");
+                }
             </div>
         </div>
     </div>
