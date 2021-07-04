@@ -61,6 +61,11 @@ namespace MyShop.Services
             return basket;
         }
 
+        public void AddToBasket(string v)
+        {
+            throw new NotImplementedException();
+        }
+
         //We create the CreateNewBasket method here
         private Basket CreateNewBasket(HttpContextBase httpContext)
         {
