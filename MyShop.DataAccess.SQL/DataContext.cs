@@ -11,7 +11,6 @@ namespace MyShop.DataAccess.SQL
     //DataContext class inherits from a data Entity Framework called DbContext
     public class DataContext : DbContext 
     {
-        //We create a Constructor so that we can capture and pass in that connection string that the base class is expecting
         public DataContext()
             : base("DefaultConnection") 
         {
@@ -21,6 +20,7 @@ namespace MyShop.DataAccess.SQL
         public DbSet<ProductCategory> ProductCategories {get; set;}
         public DbSet<Basket> Baskets { get; set; }
         public DbSet<BasketItem> BasketItems { get; set; }
+        public DbSet<Customer> Customers { get; set; } 
     }
 }
 
