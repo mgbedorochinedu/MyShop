@@ -180,6 +180,14 @@ namespace MyShop.Services
                 return model; 
             }
         }
+
+        //This method will clear the Basket
+        public void ClearBasket(HttpContextBase httpContext) 
+        {
+            Basket basket = GetBasket(httpContext, false);
+            basket.BasketItems.Clear(); 
+            basketContext.Commit(); 
+        }
     }
 }
 

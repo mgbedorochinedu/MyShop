@@ -1,4 +1,5 @@
 ﻿using MyShop.Core.Contracts;
+using MyShop.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,42 +10,71 @@ namespace MyShop.WebUI.Controllers
 {
     public class BasketController : Controller
     {
-        //We use the IBasketService to expose the formatted of the IBasketService
-        IBasketService basketService;
 
-        //Constructor that allows us to inject in the BasketService
-        public BasketController(IBasketService BasketService)
+        IBasketService basketService;
+        IOrderService orderService; 
+
+        public BasketController(IBasketService BasketService, IOrderService OrderService) 
         {
             this.basketService = BasketService;
+            this.orderService = OrderService; 
         }
+        
         // GET: Basket
         public ActionResult Index()
         {
-            //We use the Index page to return our basket view which is a list of all our basket items
             var model = basketService.GetBasketItems(this.HttpContext);
-
             return View(model);
         }
 
         //Endpoint for adding to Basket
-        public ActionResult AddToBasket(string Id) //AddToBasket takes in a ProductId & pass that through to the basketService
+        public ActionResult AddToBasket(string Id) 
         {
             basketService.AddToBasket(this.HttpContext, Id);
-            return RedirectToAction("Index"); //After adding, we redirect to Action - "Index" page
+            return RedirectToAction("Index");
         }
 
         //Endpoint for Removing from Basket
-        public ActionResult RemoveFromBasket(string Id) //RemoveToBasket takes in a ProductId & pass that through to the basketService
+        public ActionResult RemoveFromBasket(string Id) 
         {
             basketService.RemoveFromBasket(this.HttpContext, Id);
-            return RedirectToAction("Index"); //After removing, we redirect to Action - "Index" page
+            return RedirectToAction("Index"); 
         }
 
-        //The 'BasketSummary' endpoint will be a PartialViewResult
+        // 'BasketSummary' endpoint will be a PartialViewResult
         public PartialViewResult BasketSummary()
         {
             var basketSummary = basketService.GetBasketSummary(this.HttpContext);
             return PartialView(basketSummary);
+        }
+
+        //For Checkout page
+        public ActionResult Checkout()
+        {
+            return View();
+        }
+
+        //POST - Checkout Page
+        [HttpPost]
+        public ActionResult Checkout(Order order)
+        {
+            var basketItems = basketService.GetBasketItems(this.HttpContext); 
+
+            order.OrderStatus = "Order Created"; 
+
+            //Process Payment  
+
+            order.OrderStatus = "Payment Processed"; 
+            orderService.CreateOrder(order, basketItems); 
+            basketService.ClearBasket(this.HttpContext); 
+            return RedirectToAction("ThankYou", new { OrderId = order.Id });
+        }
+
+        //Create Thank you page
+        public ActionResult ThankYou(string OrderId) 
+        {
+            ViewBag.OrderId = OrderId; 
+            return View(); 
         }
     }
 }
