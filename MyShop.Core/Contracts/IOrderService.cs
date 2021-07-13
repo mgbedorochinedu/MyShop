@@ -12,5 +12,8 @@ namespace MyShop.Core.Contracts
     {
         //This will have one method called 'CreateOrder()'
         void CreateOrder(Order baseOrder, List<BasketItemViewModel> basketItems);
+        List<Order> GetOrderList();
+        Order GetOrder(string Id);
+        void UpdateOrder(Order updatedOrder);
     }
 }
